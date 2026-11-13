@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>UTH SmartMove – Di chuyển khô ráo, mát, thông thoáng</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☔</text></svg>">
+<style>
+:root{--bg:#f1f6fb;--card:#fff;--tx:#14202e;--mut:#5d6b7d;--pri:#1f6fd1;--pri2:#e2eefc;--bd:#d9e3ef;--ok:#1f9d55;--bad:#d64545;--wt:#2a7de1;--cv:#0f9b8e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1621;--card:#172230;--tx:#e9f0f8;--mut:#9aa9bc;--pri:#6ea4ff;--pri2:#1e2f47;--bd:#283648;--wt:#4c9bff;--cv:#35c4b5}}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:"Segoe UI",system-ui,-apple-system,Roboto,sans-serif;line-height:1.5}
+header{padding:22px 16px 8px;text-align:center}
+header h1{margin:4px 0 2px;font-size:1.65rem}
+header p{margin:0;color:var(--mut)}
+main{max-width:960px;margin:auto;padding:8px 14px 30px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:14px}
+h2{margin:0 0 8px;font-size:1.1rem}
+.mut{color:var(--mut);font-size:.88rem}
+.sel{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:end}
+label{font-size:.85rem;color:var(--mut);display:block}
+select{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:9px;width:100%}
+.sw{border:1px solid var(--bd);background:var(--pri2);color:var(--pri);border-radius:10px;padding:9px 12px;font-size:1.1rem;cursor:pointer}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.row button{border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:99px;padding:6px 12px;font:inherit;font-size:.86rem;cursor:pointer}
+.row.pr button{background:var(--pri2);color:var(--pri);font-weight:600}
+.row.zn button.on{background:var(--wt);border-color:var(--wt);color:#fff}
+svg.map{width:100%;height:auto;display:block}
+svg .w{fill:none;stroke:var(--tx);stroke-width:4;opacity:.8;stroke-linejoin:round}
+svg .rd{stroke:var(--tx);stroke-width:3;opacity:.8}
+svg .sa{stroke:var(--tx);stroke-width:4;fill:var(--pri2);opacity:.9}
+svg .z{fill:var(--wt);fill-opacity:.3;stroke:var(--wt);stroke-width:2;stroke-dasharray:7 5}
+svg .cv{stroke:var(--cv);stroke-width:6;stroke-dasharray:4 7;stroke-linecap:round;opacity:.75;fill:none}
+svg .chip rect{fill:var(--pri2);stroke:var(--pri);stroke-width:1.5;cursor:pointer}
+svg .chip text{fill:var(--tx);font-size:15px;text-anchor:middle;pointer-events:none}
+svg .chip.s rect{fill:var(--ok);stroke:var(--ok)}svg .chip.s text{fill:#fff}
+svg .chip.d rect{fill:var(--bad);stroke:var(--bad)}svg .chip.d text{fill:#fff}
+svg .rt{fill:none;stroke:var(--pri);stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:14 11;animation:mv 1s linear infinite}
+@keyframes mv{to{stroke-dashoffset:-25}}
+.lg span{margin-right:14px;font-size:.85rem;color:var(--mut)}.lg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.row.cd button.on{background:var(--ok);border-color:var(--ok);color:#fff}
+svg .pk{fill:none;stroke:#e08a00;stroke-width:3;stroke-dasharray:3 6}
+svg .sh{stroke:var(--ok);stroke-width:6;stroke-dasharray:2 8;stroke-linecap:round;opacity:.8}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}.tabs button{border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:99px;padding:7px 14px;font:inherit;font-size:.9rem;cursor:pointer}.tabs button.on{background:var(--pri);border-color:var(--pri);color:#fff}
+.idea{padding:9px 0;border-bottom:1px solid var(--bd)}.idea:last-child{border:0}.idea b{display:block}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:8px 0}
+.stat{background:var(--pri2);border-radius:12px;padding:10px}.stat b{display:block;font-size:1.3rem;color:var(--pri)}
+.bar{height:9px;border-radius:9px;background:var(--pri2);overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;transition:width .4s}
+.gt{border:1px solid var(--bd);border-radius:12px;padding:10px}
+.pill{display:inline-block;border-radius:99px;padding:2px 10px;font-size:.78rem;font-weight:700;color:#fff}
+table{width:100%;border-collapse:collapse;font-size:.9rem}th,td{border-bottom:1px solid var(--bd);padding:7px;text-align:left}
+.pane{display:none}.pane.on{display:block}input[type=range]{width:100%;accent-color:var(--pri)}
+h3{margin:12px 0 4px;font-size:1rem}
+ol{margin:6px 0 0;padding-left:22px}li{margin:6px 0}
+.res{font-weight:600;margin:0 0 2px}.st{margin:0 0 6px;font-size:.92rem}
+.ok{color:var(--ok)}.wet{color:var(--wt)}
+footer{text-align:center;color:var(--mut);font-size:.8rem;padding:0 16px 24px}
+</style>
+</head>
+<body>
+<header>
+  <div style="font-size:2.1rem">☔</div>
+  <h1>Di chuyển khô ráo – mát – thông thoáng</h1>
+  <p>UTH Cơ sở 1 · Đứng ở đâu cũng có hướng đi hợp lý</p>
+</header>
+<main>
+<div class="card">
+  <div class="sel">
+    <label>Từ (đang đứng)<select id="from"></select></label>
+    <button class="sw" id="swap" title="Đổi chiều">⇄</button>
+    <label>Đến<select id="to"></select></label>
+  </div>
+  <div class="row pr" id="pr"></div>
+  <div class="row zn" id="zn"></div>
+  <div class="row cd" id="cd"></div>
+</div>
+
+<div class="card">
+  <svg class="map" viewBox="0 0 1180 730" role="img" aria-label="Sơ đồ UTH">
+    <g id="zs"></g>
+    <path class="w" d="M57 62H1150M130 62V233H402V290H125V572H57V62"/>
+    <path class="w" d="M217 62V120H478V98H614V120H878V62"/>
+    <path class="w" d="M1083 62V235H802V290H1083V572M1150 62V572"/>
+    <rect class="sa" x="292" y="435" width="548" height="63"/>
+    <path class="rd" d="M35 620H175M292 620H850M982 620H1160"/>
+    <rect x="189" y="563" width="86" height="22" fill="var(--mut)" opacity=".35"/>
+    <rect x="876" y="563" width="86" height="28" fill="var(--mut)" opacity=".35"/>
+    <g id="ls"></g><g id="cvs"></g>
+    <polyline class="rt" id="rt" points=""/>
+    <circle id="c1" r="11" fill="var(--ok)" cx="-50" cy="-50"/><circle id="c2" r="11" fill="var(--bad)" cx="-50" cy="-50"/>
+    <g id="chips"></g>
+  </svg>
+  <div class="lg"><span><i style="background:var(--wt);opacity:.5"></i>Vùng ngập (giả định)</span><span><i style="background:var(--cv)"></i>Lối có mái che (giả định)</span><span><i style="background:#e08a00"></i>Khu đông xe giờ cao điểm (giả định)</span><span><i style="background:var(--ok)"></i>Cây xanh / bóng râm</span><span><i style="background:var(--pri)"></i>Đường đi gợi ý</span></div>
+</div>
+
+<div class="card">
+  <h2>Hướng đi</h2>
+  <p class="res" id="sum"></p>
+  <p class="st" id="stat"></p>
+  <ol id="steps"></ol>
+</div>
+<div class="card">
+  <h2>Tiện ích</h2>
+  <div class="tabs" id="tb"></div>
+  <div class="pane" id="p0">
+    <p class="mut">Theo dõi mật độ cổng, chỗ trống bãi xe và giãn giờ tan học để tránh kẹt xe giờ cao điểm.</p>
+    <div class="g3"><div class="stat"><b id="tCnt">–</b>Lượt xe trong khuôn viên</div><div class="stat"><b id="tGate">–</b>Cổng ít đông nhất</div><div class="stat"><b id="tWait">–</b>Thời gian chờ ra cổng</div></div>
+    <div class="row"><button id="tSim">Mô phỏng cập nhật</button><button id="tPeak">Giờ tan học (cao điểm)</button><button id="tQuiet">Giờ vắng</button><button id="tMap">Xem đường tránh đông trên bản đồ</button></div>
+    <h3>Tình trạng các cổng</h3><div class="g3" id="tGates"></div>
+    <h3>Chỗ trống bãi giữ xe</h3><div class="g3" id="tPark"></div>
+    <h3>Giãn giờ tan học theo khối</h3><div style="overflow-x:auto"><table id="tSch"></table></div>
+    <p class="mut">Chia 4 đợt, mỗi đợt chỉ khoảng 1/4 sinh viên ra cổng cùng lúc thay vì cả trường.</p>
+  </div>
+  <div class="pane" id="p1">
+    <p class="mut">Kéo giờ trong ngày để xem mức nắng và độ phủ bóng mát của lối đi.</p>
+    <label>Giờ trong ngày: <b id="hLb"></b><input type="range" id="hr" min="7" max="17" value="8"></label>
+    <div class="g3"><div class="stat"><b id="uvL">–</b>Mức nắng</div><div class="stat"><b id="shP">–</b>Lối đi có bóng mát / mái che (hiện có → có đề xuất)</div></div>
+    <div class="row"><button id="tShade">🌳 Tìm chỗ mát gần nhất từ điểm đang đứng</button></div>
+    <h3>Khảo sát nhanh: bạn cần tiện ích nào nhất?</h3><div id="vt"></div>
+  </div>
+  <div class="pane" id="p2">
+    <p class="mut">Chọn tình huống mưa để cập nhật vùng ngập trên bản đồ, hoặc báo điểm ngập bạn thấy.</p>
+    <div class="row" id="fb"></div>
+    <div class="g3"><div class="stat"><b id="fLv">–</b>Mức cảnh báo</div><div class="stat"><b id="fN">–</b>Vùng đang ngập</div><div class="stat"><b id="fAct" style="font-size:1rem">–</b>Gợi ý</div></div>
+    <h3>Báo cáo điểm ngập</h3>
+    <div class="row"><select id="rz" style="flex:1;min-width:170px"></select><button id="rAdd">Báo ngập</button><button id="rDel">Báo hết ngập</button></div>
+    <div id="rLog"></div>
+    <h3>Lịch triều cường dự kiến</h3>
+    <ul><li>25–27/11: đợt triều cường tiếp theo.</li><li>Hai đợt trong tháng 12.</li></ul>
+  </div>
+</div>
+</main>
+<footer>Sơ đồ vẽ theo ảnh mặt bằng trường UTH. Các điểm ngập, khu đông xe, lối có mái che và cây xanh đề xuất là giả định để mô phỏng.</footer>
+
+<script>
+const $=s=>document.querySelector(s);
+const PL={CT:["Căng tin",232,140],F:["Khu F",383,213],B:["Khu B",278,314],A:["Khu A",175,472],BXK:["Bãi xe / Khuôn viên",575,360],S:["Sảnh UTH",575,463],C:["Khu C",1027,478],P:["Bãi giữ xe",575,560],
+ gVao:["Cổng vào",234,620],gRa:["Cổng ra",880,620],gRV:["Cổng ra/vào",948,620],gTop:["Cổng ra / khu nghỉ ngơi",546,98]};
+const CHIP={gVao:[140,668],gRa:[880,668],gRV:[1050,668],gTop:[546,148]};
+const WP={cL:[145,140],cF:[145,225],t1:[546,150],y1:[450,200],y4:[450,300],y3:[575,300],m1:[400,350],wB:[160,330],w4:[250,400],w2:[210,490],w3:[210,540],p1:[234,570],Sn:[575,425],Ss:[575,505],q1:[400,560],q2:[750,560],p3:[910,570],e2:[870,340],e1:[900,470],OUT:[575,700]};
+const N={};Object.entries(PL).forEach(([k,v])=>N[k]=[v[1],v[2]]);Object.assign(N,WP);
+const E=["CT-cL","cL-cF","cF-F","F-y1","y1-t1","t1-gTop","t1-y3","y1-y4","y4-y3","y4-m1","y3-BXK","y4-BXK","m1-B","m1-w4","m1-BXK","B-wB","wB-w4","wB-A","A-w2","w4-w2","w2-w3","w3-p1","p1-gVao","p1-q1","q1-P","BXK-Sn","Sn-S","S-Ss","Ss-P","BXK-e2","y3-e2","e2-e1","e1-C","e1-p3","p3-q2","q2-P","p3-gRa","p3-gRV"];
+const CVE=["A-w2","wB-A","B-wB","e1-C","cF-F","cL-cF","CT-cL"];
+const cvSet=new Set();CVE.forEach(e=>{const[a,b]=e.split("-");cvSet.add(a+"-"+b);cvSet.add(b+"-"+a)});
+const ENTRY=["gVao","gRV"],EXIT=["gRa","gRV","gTop"];
+// assumed flood zones
+const Z={VO:{n:"Đường Võ Oanh",nodes:["OUT"],sh:["r",35,625,1125,100]},G1:{n:"Sân trước cổng vào",nodes:["gVao","p1"],sh:["e",234,588,90,38]},G2:{n:"Sân trước cổng ra",nodes:["gRa","gRV","p3"],sh:["e",915,590,100,40]},P:{n:"Bãi giữ xe",nodes:["P","q1","q2","Ss"],sh:["e",575,562,210,34]},W:{n:"Lối giữa Khu A và sảnh",nodes:["w2","w3"],sh:["e",208,515,48,56]},K:{n:"Khuôn viên giữa",nodes:["BXK","Sn"],sh:["e",575,375,135,60]}};
+const ZN={};Object.entries(Z).forEach(([z,v])=>v.nodes.forEach(k=>ZN[k]=z));
+const fl=new Set(["VO","G1","P"]);let peak=false,sun=false,tree=false;
+const CRN={gVao:"Cổng vào",p1:"Cổng vào",gRV:"Cổng ra/vào",gRa:"Cổng ra",p3:"Cổng ra",P:"Bãi giữ xe",q1:"Bãi giữ xe",q2:"Bãi giữ xe",Ss:"Bãi giữ xe"};
+const SHE=["B-wB","wB-w4"],SHP=["BXK-y3","y3-t1","t1-gTop","p1-q1","q1-P","P-q2","m1-BXK","e2-e1","w3-p1","w4-w2"];
+const mkS=l=>{const x=new Set();l.forEach(e=>{const[a,b]=e.split("-");x.add(a+"-"+b);x.add(b+"-"+a)});return x};
+const shSet=()=>mkS(tree?SHE.concat(SHP):SHE);
+const pen=k=>(wet(k)?350:0)+(peak&&CRN[k]?250:0);
+const wet=k=>fl.has(ZN[k]);
+const PRE=[["Trời ráo",[]],["Ngập nhẹ",["VO"]],["Ngập vừa",["VO","G1","P"]],["Ngập nặng",["VO","G1","G2","P","W","K"]]];
+const dist=(a,b)=>Math.hypot(N[a][0]-N[b][0],N[a][1]-N[b][1]);
+function route(s,d){
+  const SH=shSet();const arcs={},add=(a,b,w)=>{(arcs[a]=arcs[a]||[]).push([b,w])};
+  E.forEach(e=>{const[a,b]=e.split("-");let w=dist(a,b);if(cvSet.has(e)||(sun&&SH.has(e)))w*=.6;if((a==="S"||b==="S")&&s!=="S"&&d!=="S")w+=1500;
+    add(a,b,w+pen(b));add(b,a,w+pen(a))});
+  const vo=fl.has("VO")?350:0;
+  EXIT.forEach(g=>add(g,"OUT",30+vo));ENTRY.forEach(g=>add("OUT",g,30+pen(g)));
+  const D={},P={},V=new Set();Object.keys(N).forEach(k=>D[k]=Infinity);D[s]=0;
+  for(;;){let u=null;for(const k in D)if(!V.has(k)&&D[k]<Infinity&&(u===null||D[k]<D[u]))u=k;if(u===null||u===d)break;V.add(u);(arcs[u]||[]).forEach(([v,w])=>{if(D[u]+w<D[v]){D[v]=D[u]+w;P[v]=u}})}
+  if(D[d]===Infinity)return null;const p=[d];while(p[0]!==s)p.unshift(P[p[0]]);return{p,c:D[d]};
+}
+const nm=id=>id==="OUT"?"ngoài trường":PL[id][0];
+function dir(a,b){const dx=N[b][0]-N[a][0],dy=N[b][1]-N[a][1],h=dx>0?"phải":"trái",v=dy>0?"xuống dưới":"lên trên";
+  if(Math.abs(dx)>2*Math.abs(dy))return"đi sang bên "+h;if(Math.abs(dy)>2*Math.abs(dx))return"đi "+v;return"đi "+v+" chếch sang "+h}
+// UI
+const opts=o=>Object.keys(PL).map(k=>`<option value="${k}">${PL[k][0]}</option>`).join("")+`<option value="OUT">${o}</option>`;
+$("#from").innerHTML=opts("Ngoài trường (đường Võ Oanh)");
+$("#to").innerHTML=`<option value="DRY">☔ Chỗ khô ráo gần nhất</option><option value="SHADE">🌳 Chỗ mát gần nhất</option>`+opts("Ra ngoài trường");
+$("#from").value="gVao";$("#to").value="F";
+const NS="http://www.w3.org/2000/svg",mk=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e};
+Object.keys(PL).forEach(k=>{const[x,y]=CHIP[k]||[PL[k][1],PL[k][2]],t=PL[k][0],w=t.length*8.4+22;
+  const g=mk("g",{class:"chip",id:"ch_"+k});g.innerHTML=`<rect x="${x-w/2}" y="${y-15}" width="${w}" height="30" rx="7"/><text x="${x}" y="${y+5}">${t}</text>`;
+  g.onclick=()=>{$(pickN++%2===0?"#from":"#to").value=k;go()};$("#chips").appendChild(g)});
+let pickN=0;
+CVE.forEach(e=>{const[a,b]=e.split("-");$("#cvs").appendChild(mk("line",{class:"cv",x1:N[a][0],y1:N[a][1],x2:N[b][0],y2:N[b][1]}))});
+Object.entries(Z).forEach(([k,v])=>{const s=v.sh;$("#zs").appendChild(s[0]==="r"?mk("rect",{class:"z",id:"z_"+k,x:s[1],y:s[2],width:s[3],height:s[4],rx:10}):mk("ellipse",{class:"z",id:"z_"+k,cx:s[1],cy:s[2],rx:s[3],ry:s[4]}))});
+PRE.forEach(([t,z])=>{const b=document.createElement("button");b.textContent=t;b.onclick=()=>{fl.clear();z.forEach(x=>fl.add(x));go()};$("#pr").appendChild(b)});
+Object.keys(Z).forEach(k=>{const b=document.createElement("button");b.id="zb_"+k;b.textContent=Z[k].n;b.onclick=()=>{fl.has(k)?fl.delete(k):fl.add(k);go()};$("#zn").appendChild(b)});
+$("#from").onchange=$("#to").onchange=go;
+$("#swap").onclick=()=>{if(["DRY","SHADE"].includes($("#to").value))return;const f=$("#from").value;$("#from").value=$("#to").value;$("#to").value=f;go()};
+function go(){
+  const s=$("#from").value;let d=$("#to").value;
+  Object.keys(Z).forEach(k=>{$("#z_"+k).style.display=fl.has(k)?"":"none";$("#zb_"+k).classList.toggle("on",fl.has(k))});
+  [["peak",peak],["sun",sun],["tree",tree]].forEach(([k,v])=>$("#cb_"+k).classList.toggle("on",v));PK.forEach(k=>$("#pk_"+k).style.display=peak?"":"none");$("#shp").style.display=tree?"":"none";uiF();
+  document.querySelectorAll(".chip").forEach(c=>c.classList.remove("s","d"));
+  $("#rt").setAttribute("points","");["#c1","#c2"].forEach(c=>$(c).setAttribute("cx",-50));
+  $("#stat").textContent="";$("#steps").innerHTML="";
+  if(s!=="OUT")$("#ch_"+s).classList.add("s");
+  let r=null,shade=d==="SHADE",dry=d==="DRY"||shade;if(shade)sun=true;
+  if(dry){
+    if(!shade&&s!=="OUT"&&!wet(s)&&!s.startsWith("g")){$("#sum").textContent="Bạn đang ở chỗ khô ráo, không cần di chuyển.";return}
+    const cand=(shade?["CT","F","B","A","C"].concat(tree?["BXK","P"]:[]):["CT","F","B","A","S","C","BXK","P"]).filter(k=>k!==s&&!wet(k));
+    cand.forEach(k=>{const x=route(s,k);if(x&&(!r||x.c<r.c)){r=x;d=k}});
+    if(!r){$("#sum").textContent="Không còn chỗ khô ráo nào tiếp cận được.";return}
+  }else{
+    if(s===d){$("#sum").textContent="Bạn đang ở đúng nơi cần đến.";return}
+    r=route(s,d);if(!r){$("#sum").textContent="Không tìm được đường đi.";return}
+  }
+  const p=r.p;if(d!=="OUT")$("#ch_"+d).classList.add("d");
+  const pt=p.map((k,i)=>{if(k!=="OUT")return N[k];const g=N[p[i?i-1:i+1]];return[g[0],g[1]<300?30:705]});
+  $("#rt").setAttribute("points",pt.map(q=>q.join(",")).join(" "));
+  const a=pt[0],b=pt[pt.length-1];$("#c1").setAttribute("cx",a[0]);$("#c1").setAttribute("cy",a[1]);$("#c2").setAttribute("cx",b[0]);$("#c2").setAttribute("cy",b[1]);
+  const lab=k=>nm(k)+(wet(k)?" (đang ngập)":"");
+  const nodes=p.filter((k,i)=>k==="OUT"||PL[k]&&(k!=="S"||i===0||i===p.length-1));
+  const st=[];for(let i=0;i<nodes.length-1;i++){const x=nodes[i],y=nodes[i+1];
+    st.push(y==="OUT"?`Ra ngoài trường qua <b>${nm(x)}</b>.`:x==="OUT"?`Từ ngoài đường Võ Oanh vào trường qua <b>${nm(y)}</b>.`:`Từ <b>${lab(x)}</b> ${dir(x,y)} tới <b>${lab(y)}</b>.`)}
+  $("#steps").innerHTML=st.map(x=>"<li>"+x+"</li>").join("");
+  $("#sum").textContent=`${s==="OUT"?"Ngoài trường":nm(s)} → ${d==="OUT"?"Ra ngoài trường":nm(d)}`+(dry?(shade?" (chỗ mát gần nhất)":" (chỗ khô ráo gần nhất)"):"");
+  const wz=[...new Set(p.map(k=>ZN[k]).filter(z=>z&&fl.has(z)))].map(z=>Z[z].n);
+  const SS=shSet();let tot=0,cv=0;for(let i=0;i<p.length-1;i++){if(p[i]==="OUT"||p[i+1]==="OUT")continue;const l=dist(p[i],p[i+1]);tot+=l;if(cvSet.has(p[i]+"-"+p[i+1])||(sun&&SS.has(p[i]+"-"+p[i+1])))cv+=l}
+  const cvp=tot?Math.round(cv/tot*100):0;const cz=[...new Set(p.map(k=>CRN[k]).filter(Boolean))];
+  $("#stat").innerHTML=(wz.length?`<span class="wet">Vẫn phải lội qua: ${wz.join(", ")}.</span>`:`<span class="ok">Không phải lội qua vùng ngập nào.</span>`)+` Quãng đường có ${sun?"bóng mát/mái che":"mái che"}: ${cvp}%.`+(peak?(cz.length?` <span class="wet">Vẫn phải qua khu đông xe: ${cz.join(", ")}.</span>`:` <span class="ok">Tránh được khu đông xe.</span>`):"");
+}
+const PK=["G1","G2","P"];PK.forEach(k=>{const z=Z[k].sh;$("#ls").appendChild(mk("ellipse",{class:"pk",id:"pk_"+k,cx:z[1],cy:z[2],rx:z[3]+6,ry:z[4]+6}))});
+const gp=mk("g",{id:"shp"});SHP.forEach(e=>{const[a,b]=e.split("-");gp.appendChild(mk("line",{class:"sh",x1:N[a][0],y1:N[a][1],x2:N[b][0],y2:N[b][1]}));gp.appendChild(mk("circle",{cx:(N[a][0]+N[b][0])/2,cy:(N[a][1]+N[b][1])/2,r:8,fill:"var(--ok)"}))});$("#ls").appendChild(gp);
+$("#ls").appendChild(mk("circle",{cx:165,cy:322,r:15,fill:"var(--ok)","fill-opacity":".55"}));
+[["peak","🚗 Giờ cao điểm"],["sun","☀️ Nắng nóng"],["tree","🌳 Bật đề xuất cây xanh / mái che"]].forEach(([k,t])=>{const b=document.createElement("button");b.id="cb_"+k;b.textContent=t;b.onclick=()=>{if(k==="peak")peak=!peak;else if(k==="sun")sun=!sun;else tree=!tree;go()};$("#cd").appendChild(b)});
+const GD=[["Cổng vào",30],["Cổng ra",25],["Cổng ra/vào",35],["Cổng phía trên",10]];
+const PD=[["Bãi giữ xe phía trước",420,300],["Khuôn viên (xe đạp, xe điện)",100,35]];
+function uiT(){
+  const tot=GD.reduce((a,g)=>a+g[1],0),best=GD.reduce((a,g)=>g[1]<a[1]?g:a),ex=(GD[1][1]+GD[2][1]+GD[3][1])/3;
+  $("#tCnt").textContent=Math.round(tot*3.1);$("#tGate").textContent=best[0];$("#tWait").textContent=Math.max(1,Math.round(ex/6))+" phút";
+  $("#tGates").innerHTML=GD.map(g=>{const c=g[1]>70?["var(--bad)","Đông"]:g[1]>40?["#e08a00","Khá đông"]:["var(--ok)","Thông thoáng"];return `<div class="gt"><b>${g[0]}</b><div class="bar"><i style="width:${g[1]}%;background:${c[0]}"></i></div><span class="mut">Mật độ ${g[1]}%</span> <span class="pill" style="background:${c[0]}">${c[1]}</span></div>`}).join("");
+  $("#tPark").innerHTML=PD.map(p=>{const pc=Math.round(p[2]/p[1]*100),c=pc>90?"var(--bad)":pc>70?"#e08a00":"var(--ok)";return `<div class="gt"><b>${p[0]}</b><div class="bar"><i style="width:${pc}%;background:${c}"></i></div><span class="mut">Còn ${p[1]-p[2]} chỗ trống</span></div>`}).join("")}
+const rnd=(a,b)=>Math.round(a+Math.random()*(b-a));
+function simT(m){GD.forEach((g,i)=>g[1]=m==="p"?(i===3?rnd(20,45):rnd(70,95)):m==="q"?rnd(5,30):rnd(10,95));PD.forEach(p=>p[2]=Math.round(p[1]*(m==="p"?rnd(85,98):m==="q"?rnd(20,45):rnd(25,95))/100));if(m==="p")peak=true;if(m==="q")peak=false;uiT();go()}
+$("#tSim").onclick=()=>simT();$("#tPeak").onclick=()=>simT("p");$("#tQuiet").onclick=()=>simT("q");
+$("#tMap").onclick=()=>{peak=true;go();scrollTo({top:0,behavior:"smooth"})};
+const SC=[["Năm 1","11:00","Cổng ra (giữa)"],["Năm 2","11:10","Cổng ra/vào"],["Năm 3","11:20","Cổng ra (giữa)"],["Năm 4","11:30","Cổng phía trên (đi bộ, xe đạp)"]];
+$("#tSch").innerHTML="<tr><th>Khối</th><th>Giờ tan</th><th>Cổng gợi ý</th></tr>"+SC.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("");
+function uiS(){const h=+$("#hr").value,lv=h<9||h>16?"Nắng dịu":(h<=10||h>=15)?"Nắng vừa":"Nắng gắt";$("#hLb").textContent=h+":00";$("#uvL").textContent=lv;sun=lv!=="Nắng dịu";
+  const len=e=>{const[a,b]=e.split("-");return dist(a,b)},tot=E.reduce((a,e)=>a+len(e),0),f=S=>Math.round(E.filter(e=>S.has(e)).reduce((a,e)=>a+len(e),0)/tot*100);
+  $("#shP").textContent=f(mkS(CVE.concat(SHE)))+"% → "+f(mkS(CVE.concat(SHE,SHP)))+"%";go()}
+$("#hr").oninput=uiS;
+$("#tShade").onclick=()=>{$("#to").value="SHADE";go();scrollTo({top:0,behavior:"smooth"})};
+const VT=[["Chậu cây hành lang",0],["Ghế dưới tán cây",0],["Mái che nối các khu",0],["Vòi nước uống",0]];
+function uiV(){const m=Math.max(1,...VT.map(v=>v[1]));$("#vt").innerHTML=VT.map((v,i)=>`<div class="gt" style="margin:6px 0"><div class="row" style="margin:0;justify-content:space-between;align-items:center"><button data-v="${i}">${v[0]}</button><b>${v[1]} phiếu</b></div><div class="bar"><i style="width:${v[1]/m*100}%;background:var(--ok)"></i></div></div>`).join("")}
+$("#vt").onclick=e=>{const i=e.target.dataset.v;if(i===undefined)return;VT[i][1]++;uiV()};
+const FP=[["Trời ráo",[]],["Mưa vừa",["VO"]],["Mưa lớn",["VO","G1","P"]],["Mưa lớn + triều cường",Object.keys(Z)]];
+FP.forEach(([t,z])=>{const b=document.createElement("button");b.textContent=t;b.onclick=()=>{fl.clear();z.forEach(x=>fl.add(x));go()};$("#fb").appendChild(b)});
+$("#rz").innerHTML=Object.keys(Z).map(k=>`<option value="${k}">${Z[k].n}</option>`).join("");
+const LG=[],tm=()=>new Date().toLocaleTimeString("vi",{hour:"2-digit",minute:"2-digit"});
+function uiF(){const n=fl.size,lv=n===0?0:n<=2?1:n<=5?2:3;$("#fLv").textContent=["Bình thường","Theo dõi","Hạn chế đi lại","Nguy cơ cao"][lv];$("#fN").textContent=n+"/6";$("#fAct").textContent=["Đi bình thường","Đi chậm, ưu tiên lối có mái che","Chờ nước rút, đi theo đường khô ráo","Ở lại khu cao, cân nhắc học trực tuyến"][lv];$("#rLog").innerHTML=LG.map(x=>`<div class="idea"><b>${x}</b></div>`).join("")}
+$("#rAdd").onclick=()=>{const k=$("#rz").value;fl.add(k);LG.unshift(tm()+" · Báo ngập: "+Z[k].n);go()};
+$("#rDel").onclick=()=>{const k=$("#rz").value;fl.delete(k);LG.unshift(tm()+" · Báo hết ngập: "+Z[k].n);go()};
+["🚗 Điều phối giao thông","🌳 Bóng mát và cây xanh","🌧️ Cảnh báo ngập"].forEach((t,i)=>{const b=document.createElement("button");b.textContent=t;b.onclick=()=>pane(i);$("#tb").appendChild(b)});
+function pane(i){document.querySelectorAll("#tb button").forEach((b,j)=>b.classList.toggle("on",i===j));document.querySelectorAll(".pane").forEach((p,j)=>p.classList.toggle("on",i===j))}
+pane(0);uiT();uiV();uiS();
+go();
+</script>
+</body>
+</html>
